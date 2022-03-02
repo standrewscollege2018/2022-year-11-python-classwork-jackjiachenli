@@ -30,7 +30,7 @@ while running == True:
         ask_speed_limit = False
     while ask_speed_limit == True:
         speed_limit = input("Enter the speed limit (in km/h): ") 
-        if speed_limit.isdigit(): # checks if speed limit is a digit
+        if speed_limit.isdigit() and int(speed_limit) > 0: # checks if speed limit is a digit and greater than 0
             ask_speed_limit = False # stops loop
         else:
             print("Please enter a valid speed limit.")
