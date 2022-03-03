@@ -49,25 +49,21 @@ while running == True:
                 fine = 30
                 fines.append([name, fine])
                 amount.append(30)
-                continue
             elif 10 <= int(speed) - int(speed_limit) <= 19:
                 print(f"{name} should be fined $80")
                 fine = 80
                 fines.append([name, fine])
                 amount.append(80)
-                continue
             elif 20 <= int(speed) - int(speed_limit) <= 29:
                 print(f"{name} should be fined $130")
                 fine = 130
                 fines.append([name, fine])
                 amount.append(130)
-                continue
             elif int(speed) - int(speed_limit) > 29:
                 print(f"{name} should be fined $180")
                 fine = 180
                 fines.append([name, fine])
                 amount.append(180)
-                continue
             else: # if offender is not speeding
                 print("Offender isn't going over the speed limit.")
                 fine = 0
@@ -85,11 +81,4 @@ print("End of day summary")
 print(f"Total number of fines charges: {len(fines)}")
 print(f"Total amount fines charges: ${sum(amount)}")
 for index in range(0, len(fines)):
-    print("{}. {}: ${}".format(index+1, fines[index][0], fines[index][1]))
-
-    
-    
-    
-    
-    
-            
+    print("{}. {}: ${}".format(index+1, fines[index][0], fines[index][1])) # prints in the format '{Index}. {Name}: ${Fine}'
