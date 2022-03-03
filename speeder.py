@@ -13,7 +13,7 @@ while running == True:
     ask_name = True # ask name loop
     while ask_name == True:
         name = input("Enter the name of the offender: ")
-        if name == "John Smith" or name == "Helga Norman" or name == "Zach Conroy":
+        if name == "John Smith" or name == "Helga Norman" or name == "Zach Conroy": # warning for arrent warrant for thef ollowing names
             print(f"** ALERT! There is an arrest warrant for {name} **")
             break
         elif name == "end":
@@ -33,7 +33,7 @@ while running == True:
         if speed_limit.isdigit() and int(speed_limit) > 0: # checks if speed limit is a digit and greater than 0
             ask_speed_limit = False # stops loop
         else:
-            print("Please enter a valid speed limit.")
+            print("Please enter a valid speed limit.") # if speed limit isn't a integer
     
     ask_speed = True # ask speed loop
     if name == "end": # if name is 'end', skip this loop
@@ -44,7 +44,7 @@ while running == True:
             ask_speed = False # stops loop
             
             # calculates how much needs to be fined
-            if  0 < int(speed) - int(speed_limit) < 10: # can set int(speed) - int(speed_limit) for better looks and simplicity but not required
+            if  0 < int(speed) - int(speed_limit) < 10: # can set int(speed) - int(speed_limit) to a var for better looks and simplicity but not required
                 print(f"{name} should be fined $30")
                 fine = 30
                 fines.append([name, fine])
@@ -70,7 +70,7 @@ while running == True:
                 fines.append([name, fine])
                 amount.append(0)
         else:
-            print("Please enter a valid speed.") 
+            print("Please enter a valid speed.") # if speed isn't a digit
     if name == "end": # exits the loop for all loops for end of day summary
         break
     else: # if name is not end, restart the loop (from the very beginning)
