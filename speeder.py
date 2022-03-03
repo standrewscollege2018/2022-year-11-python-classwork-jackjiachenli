@@ -44,7 +44,7 @@ while running == True:
             ask_speed = False # stops loop
             
             # calculates how much needs to be fined
-            if  0 < int(speed) - int(speed_limit) < 10: 
+            if  0 < int(speed) - int(speed_limit) < 10: # can set int(speed) - int(speed_limit) for better looks and simplicity but not required
                 print(f"{name} should be fined $30")
                 fine = 30
                 fines.append([name, fine])
