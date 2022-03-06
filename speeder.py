@@ -15,7 +15,7 @@ while running == True:
         name = input("Enter the name of the offender: ")
         if name == "John Smith" or name == "Helga Norman" or name == "Zach Conroy": # warning for arrent warrant for thef ollowing names
             print(f"** ALERT! There is an arrest warrant for {name} **")
-            break
+            ask_name = False
         elif name == "end":
             ask_name = False
         elif not name.strip(): # checks if input is empty space
@@ -23,7 +23,7 @@ while running == True:
         elif not name.replace(' ','').isalpha(): # checks if name is a-z and allows spaces inbetween the words
             print("Please enter a valid name")
         else:
-            break # exits loop if is valid name
+            ask_name = False # exits loop if is valid name
             
     ask_speed_limit = True # ask speed limit loop
     if name == "end": # if name is 'end', skip this loop
@@ -43,23 +43,24 @@ while running == True:
         if speed.isdigit(): # checks if the speed limit is a integer
             ask_speed = False # stops loop
             
+            speed_over_limit = int(speed) - int(speed_limit)
             # calculates how much needs to be fined
-            if  0 < int(speed) - int(speed_limit) < 10: # can set int(speed) - int(speed_limit) to a var for better looks and simplicity but not required
+            if  0 < speed_over_limit < 10: # can set int(speed) - int(speed_limit) to a var for better looks and simplicity but not required
                 print(f"{name} should be fined $30")
                 fine = 30
                 fines.append([name, fine])
                 amount.append(30)
-            elif 10 <= int(speed) - int(speed_limit) <= 19:
+            elif 10 <= speed_over_limit <= 19:
                 print(f"{name} should be fined $80")
                 fine = 80
                 fines.append([name, fine])
                 amount.append(80)
-            elif 20 <= int(speed) - int(speed_limit) <= 29:
+            elif 20 <= speed_over_limit <= 29:
                 print(f"{name} should be fined $130")
                 fine = 130
                 fines.append([name, fine])
                 amount.append(130)
-            elif int(speed) - int(speed_limit) > 29:
+            elif speed_over_limit > 29:
                 print(f"{name} should be fined $180")
                 fine = 180
                 fines.append([name, fine])
@@ -72,7 +73,7 @@ while running == True:
         else:
             print("Please enter a valid speed.") # if speed isn't a digit
     if name == "end": # exits the loop for all loops for end of day summary
-        break
+        running = False
     else: # if name is not end, restart the loop (from the very beginning)
         continue
 
