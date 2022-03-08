@@ -25,11 +25,12 @@ while running == True:
         
     for index in range(0, len(cars)):
         print("{}. {} ({}) {}".format(index+1, cars[index][0], cars[index][1], cars[index][2]))
-
+        
     ask_vehicle = True
     while ask_vehicle == True:
         try:
             vehicle_number = input("Which vehicle would you like to book? ")
+            print("You may enter 0 to end the day.")
             if int(vehicle_number) == 0:
                 break   
             elif vehicle_number.isdigit or vehicle_number.replace('-','').isdigit():
