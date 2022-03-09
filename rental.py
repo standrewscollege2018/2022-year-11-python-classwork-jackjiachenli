@@ -2,8 +2,6 @@
 #  Basic Car Rental Program!  #
 # # # # # # # # # # # # # # # #
 
-import time
-
 # lists
 cars = [['Suzuki Van', 2, ''], 
         ['Toyota Corolla', 4, ''], 
