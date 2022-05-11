@@ -1,19 +1,22 @@
 """ This is a multi-choice quiz and is made by Jack Li """
 
+#imports
 import sqlite3
 
+#lists
 valid_answers = ["1", "2", "3", "4"]
 correct_answers = []
 
+#connect to the database
 DATABASE = "quiz.db"
-
 connection = sqlite3.connect(DATABASE)
 cursor = connection.cursor()
 
-
+#functions
 def ask_continue():
     global ask_quiz_number
     print("Type 1 to continue or 2 to return")
+    #asks whether the user wants to continue or go back to the selection menu
     ask_resume = True
     while ask_resume == True:
         try:
@@ -28,8 +31,8 @@ def ask_continue():
         except ValueError:
             print("Please enter 1 or 2")
 
-
 def print_quiz():
+    #for loop to print out the questions
     for result in results:
         print(
             f"""
@@ -42,10 +45,12 @@ Is it:
         """
         )
         print("Please enter your answer as a number")
+        #asks the user for an input of their chosen answer
         ask_answer = True
         while ask_answer == True:
             try:
                 answer = input()
+                #checks if the users answer is correct
                 if int(answer) == result[6]:
                     print("correct")
                     correct_answers.append(result[0])
@@ -55,7 +60,7 @@ Is it:
                         f"""
 Incorrects
 The correct answer was {result[6]}
-    """
+                    """
                     )
                     ask_answer = False
                 else:
@@ -63,13 +68,15 @@ The correct answer was {result[6]}
             except ValueError:
                 print("Please enter a valid answer")
 
-
 def get_percentage():
     global name
+    #fetches the first result (which is the length of the quiz)
     length = cursor.fetchone()[0]
     fraction = f"{len(correct_answers)}/{length}"
     percentage = round(100 * len(correct_answers) / length, 1)
-    score = 100 * len(correct_answers)
+    points = 100
+    score = points * len(correct_answers)
+    #inserts the users score into the database
     cursor.execute(
         "INSERT INTO leaderboards (name, score) VALUES (?, ?)", (name, score)
     )
@@ -82,7 +89,6 @@ You got a score of {score}!
     """
     )
 
-
 def ask_restart():
     global running
     global correct_answers
@@ -92,6 +98,7 @@ Do you want to return to the start or quit?
 Type 1 to return, 2 to quit
     """
     )
+    #asks whether the user wants to return to the selection menu
     try:
         ask_return = int(input())
         if ask_return == 1:
@@ -102,7 +109,7 @@ Type 1 to return, 2 to quit
     except ValueError:
         print("Please enter 1 or 2")
 
-
+#start of program
 print(
     """
 Welcome to the multi-choice quiz
@@ -111,8 +118,10 @@ Lets start off with getting your name
 )
 print("What is your name?")
 
+#gets the users name
 name = input()
 
+#while loop
 running = True
 while running == True:
     print(
@@ -125,14 +134,14 @@ Please pick a number
 Please enter 1, 2 or 3
     """
     )
-
-    ask_quiz_number = True
-    while ask_quiz_number == True:
+    #ask what number they would like to choose
+    ask_number = True
+    while ask_number == True:
         try:
             print("What quiz would you like to do?")
-            quiz_number = int(input())
-            if int(quiz_number) == 1:
-                ask_quiz_number = False
+            number = int(input())
+            if int(number) == 1:
+                ask_number = False
                 print(
                     """
 You have selected the Animals Quiz
@@ -141,8 +150,8 @@ Are you sure you want to continue?
                 """
                 )
                 ask_continue()
-            elif int(quiz_number) == 2:
-                ask_quiz_number = False
+            elif int(number) == 2:
+                ask_number = False
                 print(
                     """
 You have selected the Games Quiz
@@ -151,8 +160,8 @@ Are you sure you want to continue?
                 """
                 )
                 ask_continue()
-            elif int(quiz_number) == 3:
-                ask_quiz_number = False
+            elif int(number) == 3:
+                ask_number = False
                 print(
                     """
 You have selected the Score Leaderboards
@@ -165,26 +174,33 @@ Are you sure you want to continue?
         except ValueError:
             print("Please enter a valid quiz number")
 
-    if quiz_number == 1:
+    #if they picked animals quiz
+    if number == 1:
         results = cursor.execute("SELECT * FROM animals")
         print_quiz()
+        #selects the highest question_id from the games database
         cursor.execute(
             "SELECT question_id FROM animals ORDER BY question_id DESC LIMIT 1"
         )
         get_percentage()
         ask_restart()
-    elif quiz_number == 2:
+    #if they picked the games quiz
+    elif number == 2:
         results = cursor.execute("SELECT * FROM games")
         print_quiz()
+        #selects the highest question_id from the games database
         cursor.execute(
             "SELECT question_id FROM games ORDER BY question_id DESC LIMIT 1"
         )
         get_percentage()
         ask_restart()
-    elif quiz_number == 3:
+    #if they picked to see the leaderboards
+    elif number == 3:
+        #selects the name and the score from the leaderboards table then sorts it by score and adds a row number which will act as a ranking system and is limited to the top 5
         results = cursor.execute(
-            "SELECT name, score, ROW_NUMBER() OVER ( ORDER BY score DESC) AS rank FROM leaderboards LIMIT 5"
+            "SELECT name, score, ROW_NUMBER() OVER (ORDER BY score DESC) AS rank FROM leaderboards LIMIT 5"
         )
+        #prints the top 5 scores
         for result in results:
             print(
                 f"""
