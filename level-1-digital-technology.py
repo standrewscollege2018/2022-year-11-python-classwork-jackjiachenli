@@ -60,7 +60,7 @@ Is it:
                     print(
                         f"""
 Incorrect
-The correct answer was {result[6]} - {result[result[6]]}
+The correct answer was {result[6]} - {result[result[6]+1]}
                     """
                     )
                     ask_answer = False
@@ -72,6 +72,7 @@ The correct answer was {result[6]} - {result[result[6]]}
 
 def get_percentage():
     global name
+    global store_quiz_name
     # fetches the first result (which is the length of the quiz)
     length = cursor.fetchone()[0]
     fraction = f"{len(correct_answers)}/{length}"
@@ -80,7 +81,7 @@ def get_percentage():
     score = points * len(correct_answers)
     # inserts the users score into the database
     cursor.execute(
-        "INSERT INTO leaderboards (name, score) VALUES (?, ?)", (name, score)
+        "INSERT INTO leaderboards (name, score, quiz_name) VALUES (?, ?, ?)", (name, score, store_quiz_name)
     )
     connection.commit()
     print(
@@ -118,7 +119,6 @@ Type 1 to return, 2 to quit
         except ValueError:
             print("Please enter 1 or 2")
 
-
 # start of program
 print(
     """
@@ -144,21 +144,22 @@ while ask_name == True:
 # while loop
 running = True
 while running == True:
-    print(
+    # ask what number they would like to choose
+    ask_number = True
+    while ask_number == True:
+        print(
         f"""
 Hi {name}
 Please pick a number
 1. Animals Quiz
 2. Games Quiz
 3. Score Leaderboards
-Please enter 1, 2 or 3
+4. Quit
+Please enter 1, 2, 3 or 4
     """
-    )
-    # ask what number they would like to choose
-    ask_number = True
-    while ask_number == True:
+        )
         try:
-            print("What quiz would you like to do?")
+            print("What number will you pick?")
             number = int(input())
             if int(number) == 1:
                 ask_number = False
@@ -193,6 +194,15 @@ Are you sure you want to continue?
                 """
                 )
                 ask_continue()
+            elif int(number) == 4:
+                ask_number = False
+                print(
+                    """
+You have selected to quit
+Are you sure you want to continue?
+                """
+                )
+                ask_continue()
             else:
                 raise ValueError
         except ValueError:
@@ -200,6 +210,7 @@ Are you sure you want to continue?
 
     # if they picked animals quiz
     if number == 1:
+        store_quiz_name = "Animals Quiz"
         results = cursor.execute("SELECT * FROM animals")
         print_quiz()
         # selects the highest question_id from the games database
@@ -208,6 +219,7 @@ Are you sure you want to continue?
         ask_restart()
     # if they picked the games quiz
     elif number == 2:
+        store_quiz_name = "Games Quiz"
         results = cursor.execute("SELECT * FROM games")
         print_quiz()
         # selects the highest question_id from the games database
@@ -217,10 +229,12 @@ Are you sure you want to continue?
     # if they picked to see the leaderboards
     elif number == 3:
         # selects the name and the score from the leaderboards table then sorts it by score and adds a row number which will act as a ranking system and is limited to the top 5
-        results = cursor.execute("SELECT name, score, ROW_NUMBER() OVER (ORDER BY score DESC) AS rank FROM leaderboards LIMIT 5")
+        results = cursor.execute("SELECT name, score, quiz_name, ROW_NUMBER() OVER (ORDER BY score DESC) AS rank FROM leaderboards LIMIT 5")
         # prints the top 5 scores
         for result in results:
             print(
                 f"""
-{result[2]}. {result[0]} {result[1]}"""
+{result[3]}. {result[0]} - {result[1]} points - {result[2]}"""
             )
+    elif number == 4:
+        running = False
