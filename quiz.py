@@ -47,9 +47,7 @@ Is it:
         ask_answer = True
         while ask_answer == True:
             try:
-                answer = input()cccccccccccccccccc
-                ;
-
+                answer = input()
                 if int(answer) == result[6]:
                     print("Correct")
                     correct_answers.append(result[0])
